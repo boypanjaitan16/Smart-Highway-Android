@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Smart Highway</string>
+    <string name="edit_btn">Edit</string>
+    <string name="title_profile">Profile Saya</string>
+    <string name="title_history">Catatan Aktivitas</string>
+    <string name="title_home">Home</string>
+    <string name="logout">Logout</string>
+    <string name="jumlah_saldo">Jumlah saldo</string>
+    <string name="nama">Nama</string>
+    <string name="email">Email</string>
+    <string name="phone">Nomor Telepon</string>
+    <string name="simpan_perubahan">Simpan Perubahan</string>
+    <string name="password">Password</string>
+    <string name="nama_jalan">Nama Jalan</string>
+    <string name="panjang_jalan">Panjang Jalan</string>
+    <string name="tarif4">Tarif Roda 4</string>
+    <string name="tarif6">Tarif Roda 6</string>
+    <string name="lanjutkan">Lanjutkan</string>
+    <string name="jenis_kendaraan">Pilih Jenis Kendaraan anda</string>
+    <string name="roda4">Roda 4</string>
+    <string name="roda6">Roda 6</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="choose_device">Pilih Perangkat</string>
+</resources>
