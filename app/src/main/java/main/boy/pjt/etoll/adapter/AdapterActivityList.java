@@ -4,22 +4,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import main.boy.pjt.etoll.R;
-import main.boy.pjt.etoll.values.ValueActivity;
+import main.boy.pjt.etoll.response.ResponseActivity;
 
 /**
  * Created by Boy Panjaitan on 15/06/2018.
  */
 
 public class AdapterActivityList extends RecyclerView.Adapter<AdapterActivityList.ViewHolder>{
-    private List<ValueActivity.Values> values;
+    private List<ResponseActivity.Values> values;
 
-    public AdapterActivityList(List<ValueActivity.Values> valuesList){
+    public AdapterActivityList(List<ResponseActivity.Values> valuesList){
         this.values = valuesList;
     }
 
@@ -33,7 +32,7 @@ public class AdapterActivityList extends RecyclerView.Adapter<AdapterActivityLis
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(values.get(position).getRoad().getName());
         holder.date.setText(values.get(position).getDate());
-        holder.type.setText("("+values.get(position).getType()+")");
+        //holder.type.setText("("+values.get(position).getType()+")");
     }
 
     @Override
@@ -44,13 +43,13 @@ public class AdapterActivityList extends RecyclerView.Adapter<AdapterActivityLis
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView name;
         TextView date;
-        TextView type;
+        //TextView type;
 
         ViewHolder(View itemView) {
             super(itemView);
             name            = itemView.findViewById(R.id.name);
             date            = itemView.findViewById(R.id.date);
-            type            = itemView.findViewById(R.id.type);
+            //type            = itemView.findViewById(R.id.type);
 
         }
     }

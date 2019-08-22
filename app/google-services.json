@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "260879073748",
+    "firebase_url": "https://smart-highway-f9643.firebaseio.com",
+    "project_id": "smart-highway-f9643",
+    "storage_bucket": "smart-highway-f9643.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260879073748:android:462b3c8ff8354540",
+        "android_client_info": {
+          "package_name": "main.boy.pjt.etoll"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "260879073748-i5me8rkcitv6mn33dkob3mlsovffudmn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeHFli-QT1tiwNNFaWOY1GLUAANIrc8OA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "260879073748-i5me8rkcitv6mn33dkob3mlsovffudmn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

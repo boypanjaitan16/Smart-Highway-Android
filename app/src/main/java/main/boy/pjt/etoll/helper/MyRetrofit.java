@@ -19,9 +19,9 @@ public class MyRetrofit {
 
     public static Retrofit getClient() {
         if (retrofit==null) {
-
+            MySession session   = new MySession(MyApp.getContext());
             retrofit = new Retrofit.Builder()
-                    .baseUrl(MyConstant.BASE_URL)
+                    .baseUrl(session.getApiPath())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(getOkHttpClient())

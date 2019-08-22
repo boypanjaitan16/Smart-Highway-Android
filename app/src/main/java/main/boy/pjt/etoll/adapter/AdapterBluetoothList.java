@@ -12,18 +12,18 @@ import java.util.List;
 
 import main.boy.pjt.etoll.R;
 import main.boy.pjt.etoll.afterlogin.ChooseDeviceActivity;
-import main.boy.pjt.etoll.values.ValueDevices;
+import main.boy.pjt.etoll.response.ResponseDevices;
 
 /**
  * Created by Boy Panjaitan on 10/06/2018.
  */
 
 public class AdapterBluetoothList extends RecyclerView.Adapter<AdapterBluetoothList.ViewHolder> {
-    private List<ValueDevices> valueDevices;
+    private List<ResponseDevices> responseDevices;
     private Context context;
 
-    public AdapterBluetoothList(Context context,List<ValueDevices> devices){
-        this.valueDevices   = devices;
+    public AdapterBluetoothList(Context context,List<ResponseDevices> devices){
+        this.responseDevices = devices;
         this.context        = context;
     }
 
@@ -35,14 +35,14 @@ public class AdapterBluetoothList extends RecyclerView.Adapter<AdapterBluetoothL
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.name.setText(valueDevices.get(position).getName());
-        holder.address.setText(valueDevices.get(position).getAddress());
+        holder.name.setText(responseDevices.get(position).getName());
+        holder.address.setText(responseDevices.get(position).getAddress());
 
         holder.row.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((ChooseDeviceActivity)context).setResult(valueDevices.get(position).getAddress());
+                        ((ChooseDeviceActivity)context).setResult(responseDevices.get(position).getAddress());
                     }
                 }
         );
@@ -50,7 +50,7 @@ public class AdapterBluetoothList extends RecyclerView.Adapter<AdapterBluetoothL
 
     @Override
     public int getItemCount() {
-        return valueDevices.size();
+        return responseDevices.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{

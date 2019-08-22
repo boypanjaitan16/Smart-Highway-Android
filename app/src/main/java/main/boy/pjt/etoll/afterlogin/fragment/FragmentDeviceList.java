@@ -19,12 +19,11 @@ import java.util.List;
 import java.util.Set;
 
 import main.boy.pjt.etoll.R;
-import main.boy.pjt.etoll.adapter.AdapterActivityList;
 import main.boy.pjt.etoll.adapter.AdapterBluetoothList;
 import main.boy.pjt.etoll.afterlogin.CoreActivity;
 import main.boy.pjt.etoll.helper.MyAlert;
 import main.boy.pjt.etoll.helper.MySession;
-import main.boy.pjt.etoll.values.ValueDevices;
+import main.boy.pjt.etoll.response.ResponseDevices;
 
 /**
  * Created by Boy Panjaitan on 15/06/2018.
@@ -36,7 +35,7 @@ public class FragmentDeviceList extends Fragment {
     SwipeRefreshLayout refreshLayout;
     RecyclerView recyclerView;
     Set<BluetoothDevice> devices;
-    List<ValueDevices> valueDevices;
+    List<ResponseDevices> responseDevices;
     BluetoothAdapter adapter;
 
     @Nullable
@@ -50,7 +49,7 @@ public class FragmentDeviceList extends Fragment {
         alert       = new MyAlert(getContext(), false);
         refreshLayout   = view.findViewById(R.id.swipe);
         recyclerView    = view.findViewById(R.id.device_list);
-        valueDevices    = new ArrayList<>();
+        responseDevices = new ArrayList<>();
         adapter         = ((CoreActivity)getActivity()).getAdapter();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -76,12 +75,12 @@ public class FragmentDeviceList extends Fragment {
             devices = adapter.getBondedDevices();
 
             if(devices.size() > 0){
-                valueDevices.clear();
+                responseDevices.clear();
                 for(BluetoothDevice device: devices){
-                    valueDevices.add(new ValueDevices(device.getName(), device.getAddress()));
+                    responseDevices.add(new ResponseDevices(device.getName(), device.getAddress()));
                 }
 
-                AdapterBluetoothList adapterBluetoothList = new AdapterBluetoothList(getContext(), valueDevices);
+                AdapterBluetoothList adapterBluetoothList = new AdapterBluetoothList(getContext(), responseDevices);
 
                 recyclerView.setAdapter(adapterBluetoothList);
 

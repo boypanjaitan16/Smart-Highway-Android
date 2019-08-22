@@ -16,15 +16,13 @@ import java.util.List;
 
 import main.boy.pjt.etoll.R;
 import main.boy.pjt.etoll.adapter.AdapterActivityList;
-import main.boy.pjt.etoll.adapter.AdapterRoadList;
 import main.boy.pjt.etoll.afterlogin.CoreActivity;
 import main.boy.pjt.etoll.helper.MyAlert;
 import main.boy.pjt.etoll.helper.MyConstant;
 import main.boy.pjt.etoll.helper.MyRetrofit;
 import main.boy.pjt.etoll.helper.MyRetrofitInterface;
 import main.boy.pjt.etoll.helper.MySession;
-import main.boy.pjt.etoll.values.ValueActivity;
-import main.boy.pjt.etoll.values.ValueRoad;
+import main.boy.pjt.etoll.response.ResponseActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,14 +69,14 @@ public class FragmentActivityLog extends Fragment {
 
     private void loadActivities(){
         MyRetrofitInterface retrofitInterface   = MyRetrofit.getClient().create(MyRetrofitInterface.class);
-        Call<ValueActivity.RetrofitResponse> call       = retrofitInterface.getActivities(session.getCOSTUMER_ID());
+        Call<ResponseActivity.RetrofitResponse> call       = retrofitInterface.getActivities(session.getCOSTUMER_ID());
 
         call.enqueue(
-                new Callback<ValueActivity.RetrofitResponse>() {
+                new Callback<ResponseActivity.RetrofitResponse>() {
                     @Override
-                    public void onResponse(Call<ValueActivity.RetrofitResponse> call, Response<ValueActivity.RetrofitResponse> response) {
+                    public void onResponse(Call<ResponseActivity.RetrofitResponse> call, Response<ResponseActivity.RetrofitResponse> response) {
                         if (response.body().getStatus().equals(MyConstant.System.responseSuccess)){
-                            List<ValueActivity.Values> values   = response.body().getData();
+                            List<ResponseActivity.Values> values   = response.body().getData();
                             AdapterActivityList adapterActivityList = new AdapterActivityList(values);
 
                             recyclerView.setAdapter(adapterActivityList);
@@ -93,7 +91,7 @@ public class FragmentActivityLog extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<ValueActivity.RetrofitResponse> call, Throwable t) {
+                    public void onFailure(Call<ResponseActivity.RetrofitResponse> call, Throwable t) {
                         alert.alertInfo(t.getMessage());
                     }
                 }

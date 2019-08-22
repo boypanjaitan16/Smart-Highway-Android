@@ -19,10 +19,30 @@ public class MySession {
     private static final String EMAIL       = "EMAIL";
     private static final String PHONE       = "PHONE";
     private static final String IS_LOGIN    = "IS_LOGIN";
+    private static final String API_PATH    = "API_PATH";
+    private static final String FBM_TOKEN   = "FBM_TOKEN";
 
     public MySession(Context context) {
         pref            = context.getSharedPreferences(PREF_NAME, 0);
         editor          = pref.edit();
+    }
+
+    public String getFbmToken(){
+        return pref.getString(FBM_TOKEN, FBM_TOKEN);
+    }
+
+    public void setFbmToken(String token){
+        editor.putString(FBM_TOKEN, token);
+        editor.commit();
+    }
+
+    public String getApiPath(){
+        return pref.getString(API_PATH, MyConstant.BASE_URL);
+    }
+
+    public void setApiPath(String api){
+        editor.putString(API_PATH, api);
+        editor.commit();
     }
 
     public String getCOSTUMER_ID() {

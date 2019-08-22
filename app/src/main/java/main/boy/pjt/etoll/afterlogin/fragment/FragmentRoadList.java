@@ -1,8 +1,10 @@
 package main.boy.pjt.etoll.afterlogin.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,9 +12,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -24,7 +29,8 @@ import main.boy.pjt.etoll.helper.MyConstant;
 import main.boy.pjt.etoll.helper.MyRetrofit;
 import main.boy.pjt.etoll.helper.MyRetrofitInterface;
 import main.boy.pjt.etoll.helper.MySession;
-import main.boy.pjt.etoll.values.ValueRoad;
+import main.boy.pjt.etoll.interfaces.OnGateItemClickInterface;
+import main.boy.pjt.etoll.response.ResponseRoad;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,6 +45,7 @@ public class FragmentRoadList extends Fragment {
     SwipeRefreshLayout refreshLayout;
     MySession session;
     MyAlert alert;
+    ResponseRoad.Values mValues;
 
     @Nullable
     @Override
@@ -52,6 +59,8 @@ public class FragmentRoadList extends Fragment {
         session         = new MySession(getContext());
         alert           = new MyAlert(getContext(), false);
 
+
+        registerForContextMenu(refreshLayout);
 
         roadlist.setLayoutManager(new LinearLayoutManager(getContext()));
         roadlist.setItemAnimator(new DefaultItemAnimator());
@@ -73,15 +82,23 @@ public class FragmentRoadList extends Fragment {
 
     private void getRoadList(){
         MyRetrofitInterface retrofitInterface   = MyRetrofit.getClient().create(MyRetrofitInterface.class);
-        Call<ValueRoad.RetrofitResponse> call       = retrofitInterface.getRoadList(session.getCOSTUMER_ID());
+        Call<ResponseRoad.RetrofitResponse> call       = retrofitInterface.getRoadList(session.getCOSTUMER_ID());
 
         call.enqueue(
-                new Callback<ValueRoad.RetrofitResponse>() {
+                new Callback<ResponseRoad.RetrofitResponse>() {
                     @Override
-                    public void onResponse(Call<ValueRoad.RetrofitResponse> call, Response<ValueRoad.RetrofitResponse> response) {
+                    public void onResponse(Call<ResponseRoad.RetrofitResponse> call, Response<ResponseRoad.RetrofitResponse> response) {
                         if (response.body().getStatus().equals(MyConstant.System.responseSuccess)) {
-                            List<ValueRoad.Values> values = response.body().getData();
-                            AdapterRoadList adapterRoadList = new AdapterRoadList(getContext(), values);
+                            List<ResponseRoad.Values> values = response.body().getData();
+                            AdapterRoadList adapterRoadList = new AdapterRoadList(getContext(), values, new OnGateItemClickInterface() {
+                                @Override
+                                public void onItemClick(ResponseRoad.Values values) {
+
+                                    mValues = values;
+                                    refreshLayout.showContextMenu();
+
+                                }
+                            });
 
                             roadlist.setAdapter(adapterRoadList);
 
@@ -95,48 +112,38 @@ public class FragmentRoadList extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<ValueRoad.RetrofitResponse> call, Throwable t) {
+                    public void onFailure(Call<ResponseRoad.RetrofitResponse> call, Throwable t) {
                         alert.alertInfo(t.getMessage());
                     }
                 }
         );
     }
 
-    public void showDetailRoad(Bundle bundle){
-        FragmentRoadDetail fragment = new FragmentRoadDetail();
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.setHeaderTitle("Pilih Jenis Kendaraan");
+
+        menu.add(0, 1, 0, "GOLONGAN I");
+        menu.add(0, 2, 0, "GOLONGAN II");
+        menu.add(0, 3, 0, "GOLONGAN III");
+        menu.add(0, 4, 0, "GOLONGAN IV");
+        menu.add(0, 5, 0, "GOLONGAN V");
+        menu.add(0, 6, 0, "GOLONGAN VI");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        Bundle bundle   = new Bundle();
+        bundle.putSerializable("value", mValues);
+        bundle.putString("jenis", item.getTitle().toString());
+
+        FragmentOutGateList fragment = new FragmentOutGateList();
         fragment.setArguments(bundle);
 
-        if (((CoreActivity)getActivity()).getAdapter() != null){
-            if (((CoreActivity)getActivity()).getAdapter().isEnabled()){
-                if (((CoreActivity)getActivity()).getSocket() != null && ((CoreActivity)getActivity()).getSocket().isConnected()){
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.fragmentContainer, fragment);
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    ft.addToBackStack("fragments");
-                    ft.commit();
-                }
-                else {
-                    alert.alertWithConfirm("Bluetooth", "Perangkat anda belum terhubung, apakah anda ingin menghubungkannya sekarang ?",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    ((CoreActivity)getActivity()).connectBluetoothSocket();
-                                }
-                            },
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                }
-                            });
-                }
-            }
-            else{
-                alert.alertInfoTitle("Bluetooth", "Bluetooth pada perangkat anda belum menyala, silahkan klik tombol bluetooth pada sudut kanan atas untuk panduan lebih lanjut");
-            }
-        }
-        else {
-            alert.alertInfoTitle("Bluetooth", "Maaf, perangkat anda tidak mendukung fitur bluetooth");
-        }
+        ((CoreActivity)getActivity()).startFragment(fragment);
+        return super.onContextItemSelected(item);
     }
 }

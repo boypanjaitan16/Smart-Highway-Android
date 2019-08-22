@@ -1,4 +1,4 @@
-package main.boy.pjt.etoll.values;
+package main.boy.pjt.etoll.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by Boy Panjaitan on 04/03/2018.
  */
 
-public class ValueProfile {
+public class ResponseProfile {
     public static class RetrofitResponse{
         @SerializedName("status")
         @Expose
@@ -21,7 +21,7 @@ public class ValueProfile {
 
         @SerializedName("data")
         @Expose
-        private ValueProfile.Values data;
+        private ResponseProfile.Values data;
 
         public String getStatus() {
             return status;
@@ -39,11 +39,11 @@ public class ValueProfile {
             this.message = message;
         }
 
-        public ValueProfile.Values getData() {
+        public ResponseProfile.Values getData() {
             return data;
         }
 
-        public void setData(ValueProfile.Values data) {
+        public void setData(ResponseProfile.Values data) {
             this.data = data;
         }
     }

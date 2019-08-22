@@ -1,14 +1,16 @@
-package main.boy.pjt.etoll.values;
+package main.boy.pjt.etoll.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 
 
 /**
  * Created by Boy Panjaitan on 09/03/2018.
  */
 
-public class ValueResponse {
+public class ResponseDefault implements Serializable {
     @SerializedName("status")
     @Expose
     private String status;

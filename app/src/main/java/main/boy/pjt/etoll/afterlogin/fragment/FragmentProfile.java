@@ -1,6 +1,5 @@
 package main.boy.pjt.etoll.afterlogin.fragment;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +9,10 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import main.boy.pjt.etoll.R;
 import main.boy.pjt.etoll.afterlogin.CoreActivity;
@@ -23,8 +22,8 @@ import main.boy.pjt.etoll.helper.MyConstant;
 import main.boy.pjt.etoll.helper.MyRetrofit;
 import main.boy.pjt.etoll.helper.MyRetrofitInterface;
 import main.boy.pjt.etoll.helper.MySession;
-import main.boy.pjt.etoll.values.ValueBalance;
-import main.boy.pjt.etoll.values.ValueResponse;
+import main.boy.pjt.etoll.response.ResponseBalance;
+import main.boy.pjt.etoll.response.ResponseDefault;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -105,6 +104,7 @@ public class FragmentProfile extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         final View layout = getLayoutInflater().inflate(R.layout.layout_topup_balance, null);
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -117,11 +117,11 @@ public class FragmentProfile extends Fragment {
                                             alert.loaderStart();
                                             int nominal = Integer.valueOf(balance.getText().toString());
 
-                                            Call<ValueResponse> call = retrofitInterface.topUpBalance(session.getCOSTUMER_ID(), nominal);
+                                            Call<ResponseDefault> call = retrofitInterface.topUpBalance(session.getCOSTUMER_ID(), nominal);
                                             call.enqueue(
-                                                    new Callback<ValueResponse>() {
+                                                    new Callback<ResponseDefault>() {
                                                         @Override
-                                                        public void onResponse(Call<ValueResponse> call, Response<ValueResponse> response) {
+                                                        public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
                                                             alert.loaderStop();
                                                             if (response.body().getStatus().equals(MyConstant.System.responseSuccess)) {
                                                                 alert.alertInfoTitle("Top-up Saldo", "Terimakasih, permintaan anda sedang dalam proses verifikasi dari pihak kami");
@@ -132,7 +132,7 @@ public class FragmentProfile extends Fragment {
                                                         }
 
                                                         @Override
-                                                        public void onFailure(Call<ValueResponse> call, Throwable t) {
+                                                        public void onFailure(Call<ResponseDefault> call, Throwable t) {
                                                             alert.loaderStop();
                                                             alert.alertInfo(t.getMessage());
                                                         }
@@ -153,6 +153,7 @@ public class FragmentProfile extends Fragment {
 
                         AlertDialog dialog = builder.create();
                         dialog.show();
+
                     }
                 }
         );
@@ -162,15 +163,17 @@ public class FragmentProfile extends Fragment {
         return view;
     }
 
+
+
     private void loadBalance(){
-        Call<ValueBalance.RetrofitResponse> call     = retrofitInterface.getBalance(session.getCOSTUMER_ID());
+        Call<ResponseBalance.RetrofitResponse> call     = retrofitInterface.getBalance(session.getCOSTUMER_ID());
 
         call.enqueue(
-                new Callback<ValueBalance.RetrofitResponse>() {
+                new Callback<ResponseBalance.RetrofitResponse>() {
                     @Override
-                    public void onResponse(Call<ValueBalance.RetrofitResponse> call, Response<ValueBalance.RetrofitResponse> response) {
+                    public void onResponse(Call<ResponseBalance.RetrofitResponse> call, Response<ResponseBalance.RetrofitResponse> response) {
                         if (response.body().getStatus().equals(MyConstant.System.responseSuccess)){
-                            ValueBalance.Values values = response.body().getData();
+                            ResponseBalance.Values values = response.body().getData();
                             saldoValue.setText(new StringBuilder().append("Rp ").append(values.getBalance()).toString());
                         }
                         else{
@@ -179,7 +182,7 @@ public class FragmentProfile extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<ValueBalance.RetrofitResponse> call, Throwable t) {
+                    public void onFailure(Call<ResponseBalance.RetrofitResponse> call, Throwable t) {
                         alert.alertInfo(t.getMessage());
                     }
                 }

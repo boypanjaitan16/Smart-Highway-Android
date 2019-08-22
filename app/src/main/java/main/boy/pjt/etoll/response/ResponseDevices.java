@@ -1,4 +1,4 @@
-package main.boy.pjt.etoll.values;
+package main.boy.pjt.etoll.response;
 
 import java.io.Serializable;
 
@@ -6,16 +6,16 @@ import java.io.Serializable;
  * Created by Boy Panjaitan on 15/06/2018.
  */
 
-public class ValueDevices implements Serializable {
+public class ResponseDevices implements Serializable {
     private String name;
 
     private String address;
 
-    public ValueDevices(){
+    public ResponseDevices(){
 
     }
 
-    public ValueDevices(String name, String address){
+    public ResponseDevices(String name, String address){
         setAddress(address);
         setName(name);
     }

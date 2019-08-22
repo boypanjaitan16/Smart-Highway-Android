@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
 import main.boy.pjt.etoll.R;
 import main.boy.pjt.etoll.afterlogin.CoreActivity;
@@ -21,9 +22,9 @@ import main.boy.pjt.etoll.helper.MyConstant;
 import main.boy.pjt.etoll.helper.MyRetrofit;
 import main.boy.pjt.etoll.helper.MyRetrofitInterface;
 import main.boy.pjt.etoll.helper.MySession;
-import main.boy.pjt.etoll.values.ValueBalance;
-import main.boy.pjt.etoll.values.ValueResponse;
-import main.boy.pjt.etoll.values.ValueRoad;
+import main.boy.pjt.etoll.response.ResponseBalance;
+import main.boy.pjt.etoll.response.ResponseDefault;
+import main.boy.pjt.etoll.response.ResponseRoad;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,13 +35,12 @@ import retrofit2.Response;
 
 public class FragmentRoadDetail extends Fragment {
 
-    ValueRoad.Values roadValue;
+    ResponseRoad.Values roadValue;
+    ResponseRoad.OutGate gateValue;
     TextView namaJalan;
+    TextView namaGate;
     TextView panjangJalan;
-    TextView tarifRoda4;
-    TextView tarifRoda6;
-    RadioGroup tarifGroup;
-    RadioButton selectedButton;
+    TextView tarif;
     LinearLayout btnLanjutkan;
     MyAlert alert;
     MySession session;
@@ -51,89 +51,37 @@ public class FragmentRoadDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View mainView   = inflater.inflate(R.layout.fragment_detail_road, container, false);
 
-        roadValue   = (ValueRoad.Values) getArguments().getSerializable("value");
+        roadValue   = (ResponseRoad.Values) getArguments().getSerializable("value");
+        gateValue   = (ResponseRoad.OutGate) getArguments().getSerializable("gate");
         namaJalan   = mainView.findViewById(R.id.nama_jalan);
+        namaGate    = mainView.findViewById(R.id.nama_gate);
         panjangJalan    = mainView.findViewById(R.id.panjang_jalan);
-        tarifRoda4  = mainView.findViewById(R.id.roda4);
-        tarifRoda6  = mainView.findViewById(R.id.roda6);
-        tarifGroup  = mainView.findViewById(R.id.radioTarif);
+        tarif  = mainView.findViewById(R.id.tarif);
         btnLanjutkan    = mainView.findViewById(R.id.lanjutkan);
         alert       = new MyAlert(getContext(), false);
         session     = new MySession(getContext());
         retrofitInterface   = MyRetrofit.getClient().create(MyRetrofitInterface.class);
 
         namaJalan.setText(roadValue.getName());
-        panjangJalan.setText(roadValue.getDistance()+" KM");
-        tarifRoda4.setText("Rp. "+roadValue.getPrice4());
-        tarifRoda6.setText("Rp. "+roadValue.getPrice6());
+        namaGate.setText(gateValue.getName());
+        panjangJalan.setText(gateValue.getDistance()+" KM");
+        tarif.setText("Rp. "+gateValue.getPrice());
 
         btnLanjutkan.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int checkedId   = tarifGroup.getCheckedRadioButtonId();
-                        if (checkedId != -1){
-                            alert.loaderStart();
-                            selectedButton  = mainView.findViewById(checkedId);
 
-                            try {
-                                Call<ValueResponse> call       = retrofitInterface.checkBalance(session.getCOSTUMER_ID(), roadValue.getId(), selectedButton.getText().toString());
-
-                                call.enqueue(
-                                        new Callback<ValueResponse>() {
-                                            @Override
-                                            public void onResponse(Call<ValueResponse> call, Response<ValueResponse> response) {
-                                                alert.loaderStop();
-                                                if (response.body().getStatus().equals(MyConstant.System.responseSuccess)){
-                                                    String tipeRoda     = selectedButton.getText().toString();
-                                                    final int jlhRoda         = Integer.valueOf(tipeRoda.replaceAll("\\D", ""));
-                                                    Call<ValueBalance.RetrofitResponse> callPlaceOrder  = retrofitInterface.placeRoadOrder(session.getCOSTUMER_ID(), roadValue.getId(), tipeRoda);
-
-                                                    callPlaceOrder.enqueue(
-                                                            new Callback<ValueBalance.RetrofitResponse>() {
-                                                                @Override
-                                                                public void onResponse(Call<ValueBalance.RetrofitResponse> call, Response<ValueBalance.RetrofitResponse> response) {
-                                                                    if (response.body().getStatus().equals(MyConstant.System.responseSuccess)){
-                                                                        int balance = response.body().getData().getBalance();
-                                                                        //this is the one who did the show
-                                                                        try {
-                                                                            ((CoreActivity)getActivity()).moveGate(1, balance, jlhRoda);
-                                                                        } catch (IOException e) {
-                                                                            e.printStackTrace();
-                                                                            alert.alertInfo(e.getMessage());
-                                                                        }
-                                                                    }
-                                                                    else {
-                                                                        alert.alertInfo(response.body().getMessage());
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void onFailure(Call<ValueBalance.RetrofitResponse> call, Throwable t) {
-                                                                    alert.alertInfo(t.getMessage());
-                                                                }
-                                                            }
-                                                    );
-                                                }
-                                                else {
-                                                    alert.alertInfo(response.body().getMessage());
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ValueResponse> call, Throwable t) {
-                                                alert.alertInfo(t.getMessage());
-                                            }
-                                        }
-                                );
+                        //out of tol
+                        ((CoreActivity)getActivity()).moveGate(2, roadValue.getId(), gateValue, new Callable<Void>() {
+                            @Override
+                            public Void call() throws Exception {
+                                Toast.makeText(getContext(), "Selamat Jalan. Terimakasih", Toast.LENGTH_LONG).show();
+                                ((CoreActivity)getActivity()).startFragment(new FragmentRoadList());
+                                return null;
                             }
-                            catch (NullPointerException e){
-                                alert.alertInfo(e.getMessage());
-                            }
-                        }
-                        else{
-                            Toast.makeText(getContext(), "Anda belum memilih jenis kendaraan anda", Toast.LENGTH_LONG).show();
-                        }
+                        });
+
                     }
                 }
         );

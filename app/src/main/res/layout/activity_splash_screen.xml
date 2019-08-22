@@ -3,8 +3,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/colorAccent"
+    android:background="@color/colorPrimaryDark"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:src="@drawable/icon"
+        android:layout_width="70dp"
+        android:layout_height="70dp" />
     <TextView
         android:text="@string/app_name"
         android:textColor="#FFFFFF"
@@ -13,8 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
-        android:text="Created by Ladys Pakpahan"
+        android:textColor="#FFFFFF"
+        android:text="www.boypanjaitan.me"
         android:layout_width="wrap_content"
-        android:textColor="#EEEEEE"
         android:layout_height="wrap_content" />
 </LinearLayout>

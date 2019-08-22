@@ -7,7 +7,9 @@
     android:weightSum="10"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="main.boy.pjt.etoll.afterlogin.CoreActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".afterlogin.CoreActivity"
+    tools:showIn="@layout/activity_main">
 
     <RelativeLayout
         android:id="@+id/fragmentContainer"

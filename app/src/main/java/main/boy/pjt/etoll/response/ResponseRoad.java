@@ -1,4 +1,4 @@
-package main.boy.pjt.etoll.values;
+package main.boy.pjt.etoll.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Boy Panjaitan on 08/06/2018.
  */
 
-public class ValueRoad {
+public class ResponseRoad {
     public static class RetrofitResponse{
         @SerializedName("status")
         @Expose
@@ -40,12 +40,62 @@ public class ValueRoad {
             this.message = message;
         }
 
-        public List<ValueRoad.Values> getData() {
+        public List<ResponseRoad.Values> getData() {
             return data;
         }
 
-        public void setData(List<ValueRoad.Values> data) {
+        public void setData(List<ResponseRoad.Values> data) {
             this.data = data;
+        }
+    }
+
+    public static class OutGate implements Serializable{
+        @SerializedName("id")
+        @Expose
+        private String id;
+
+        @SerializedName("name")
+        @Expose
+        private String name;
+
+        @SerializedName("distance")
+        @Expose
+        private int distance;
+
+        @SerializedName("price")
+        @Expose
+        private int price;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getDistance() {
+            return distance;
+        }
+
+        public void setDistance(int distance) {
+            this.distance = distance;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+
+        public void setPrice(int price) {
+            this.price = price;
         }
     }
 
@@ -70,6 +120,15 @@ public class ValueRoad {
         @Expose
         private int price6;
 
+        @SerializedName("price")
+        @Expose
+        private int price;
+
+        @SerializedName("out")
+        @Expose
+        private List<OutGate> outGates;
+
+
         public String getId() {
             return id;
         }
@@ -80,6 +139,14 @@ public class ValueRoad {
 
         public String getName() {
             return name;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+
+        public void setPrice(int price) {
+            this.price = price;
         }
 
         public void setName(String name) {
@@ -109,5 +176,14 @@ public class ValueRoad {
         public void setPrice6(int price6) {
             this.price6 = price6;
         }
+
+        public List<OutGate> getOutGates() {
+            return outGates;
+        }
+
+        public void setOutGates(List<OutGate> outGates) {
+            this.outGates = outGates;
+        }
     }
+
 }

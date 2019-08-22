@@ -4,6 +4,7 @@
     <string name="title_profile">Profile Saya</string>
     <string name="title_history">Catatan Aktivitas</string>
     <string name="title_home">Home</string>
+    <string name="title_outgate">Gerbang Keluar</string>
     <string name="logout">Logout</string>
     <string name="jumlah_saldo">Jumlah saldo</string>
     <string name="nama">Nama</string>
@@ -11,6 +12,7 @@
     <string name="phone">Nomor Telepon</string>
     <string name="simpan_perubahan">Simpan Perubahan</string>
     <string name="password">Password</string>
+    <string name="nama_gerbang">Gerbang Keluar</string>
     <string name="nama_jalan">Nama Jalan</string>
     <string name="panjang_jalan">Panjang Jalan</string>
     <string name="tarif4">Tarif Roda 4</string>
@@ -21,4 +23,6 @@
     <string name="roda6">Roda 6</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="choose_device">Pilih Perangkat</string>
+    <string name="notifications_admin_channel_name">notifications_admin_channel_name</string>
+    <string name="notifications_admin_channel_description">notifications_admin_channel_description</string>
 </resources>

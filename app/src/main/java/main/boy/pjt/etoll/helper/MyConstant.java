@@ -6,8 +6,8 @@ package main.boy.pjt.etoll.helper;
 
 public class MyConstant {
     //static final String BASE_URL = "http://192.168.43.197/highway/api/";
-    static final String BASE_URL = "http://boypanjaitan.me/highway/api/";
-    //static final String BASE_URL = "http://110.232.95.109/highway/api/";
+    //static final String BASE_URL = "http://boypanjaitan.me/highway/api/";
+    static final String BASE_URL = "http://dislh.sumutprov.go.id/iklh/highway/api/";
 
     static class Endpoint{
         static final String registerPath        = "member/register/";
@@ -18,6 +18,7 @@ public class MyConstant {
         static final String checkBalance        = "member/check-balance/";
         static final String topUpBalance        = "member/top-up/";
         static final String getActivities       = "member/get-activities/";
+        static final String updateFbmToken      = "member/update-fbm-token/";
         static final String getRoadList         = "road/get-all/";
         static final String placeRoadOrder      = "road/place-order/";
     }
@@ -26,5 +27,6 @@ public class MyConstant {
         public static final String warningMessageTitle  = "Oops ...";
         public static final String responseSuccess      = "success";
         public static final String loadingMessage       = "Please wait ...";
+        public static final String ADMIN_CHANNEL_ID     = "ADMIN_CHANNEL_ID";
     }
 }

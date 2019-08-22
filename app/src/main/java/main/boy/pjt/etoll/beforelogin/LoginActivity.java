@@ -10,6 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import main.boy.pjt.etoll.afterlogin.CoreActivity;
 import main.boy.pjt.etoll.R;
 import main.boy.pjt.etoll.helper.MyAlert;
@@ -17,7 +21,8 @@ import main.boy.pjt.etoll.helper.MyConstant;
 import main.boy.pjt.etoll.helper.MyRetrofit;
 import main.boy.pjt.etoll.helper.MyRetrofitInterface;
 import main.boy.pjt.etoll.helper.MySession;
-import main.boy.pjt.etoll.values.ValueProfile;
+import main.boy.pjt.etoll.request.RequestLogin;
+import main.boy.pjt.etoll.response.ResponseProfile;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +50,16 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, CoreActivity.class));
             finish();
         }
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this,  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String newToken = instanceIdResult.getToken();
+                Log.e("NEW TOKEN",newToken);
+                session.setFbmToken(newToken);
+
+            }
+        });
 
         alert           = new MyAlert(this, false);
         registerBtn     = findViewById(R.id.go_register);
@@ -78,17 +93,18 @@ public class LoginActivity extends AppCompatActivity {
         final String valPass    = passwordField.getText().toString();
         String valUsername      = usernameField.getText().toString();
 
+        RequestLogin body       = new RequestLogin(valUsername, valPass);
         MyRetrofitInterface retrofitInterface   = MyRetrofit.getClient().create(MyRetrofitInterface.class);
-        Call<ValueProfile.RetrofitResponse> call     = retrofitInterface.login(valUsername, valPass);
+        Call<ResponseProfile.RetrofitResponse> call     = retrofitInterface.loginField(valUsername, valPass, session.getFbmToken());
 
         call.enqueue(
-                new Callback<ValueProfile.RetrofitResponse>() {
+                new Callback<ResponseProfile.RetrofitResponse>() {
                     @Override
-                    public void onResponse(Call<ValueProfile.RetrofitResponse> call, Response<ValueProfile.RetrofitResponse> response) {
+                    public void onResponse(Call<ResponseProfile.RetrofitResponse> call, Response<ResponseProfile.RetrofitResponse> response) {
                         progressDialog.dismiss();
                         if (response.body().getStatus().equals(MyConstant.System.responseSuccess)){
 
-                            ValueProfile.Values values   = response.body().getData();
+                            ResponseProfile.Values values   = response.body().getData();
 
                             session.setCOSTUMER_ID(values.getUsername());
                             session.setNAME(values.getName());
@@ -108,9 +124,10 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<ValueProfile.RetrofitResponse> call, Throwable t) {
+                    public void onFailure(Call<ResponseProfile.RetrofitResponse> call, Throwable t) {
                         progressDialog.dismiss();
                         alert.alertInfo(t.getMessage());
+                        t.printStackTrace();
                     }
                 }
         );

@@ -17,8 +17,7 @@ import main.boy.pjt.etoll.helper.MyConstant;
 import main.boy.pjt.etoll.helper.MyRetrofit;
 import main.boy.pjt.etoll.helper.MyRetrofitInterface;
 import main.boy.pjt.etoll.helper.MySession;
-import main.boy.pjt.etoll.values.ValueBalance;
-import main.boy.pjt.etoll.values.ValueResponse;
+import main.boy.pjt.etoll.response.ResponseDefault;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,12 +76,12 @@ public class FragmentEditProfile extends Fragment {
 
         alert.loaderStart();
         MyRetrofitInterface retrofitInterface   = MyRetrofit.getClient().create(MyRetrofitInterface.class);
-        Call<ValueResponse> call     = retrofitInterface.updateProfile(session.getCOSTUMER_ID(), name, password, email, phone);
+        Call<ResponseDefault> call     = retrofitInterface.updateProfile(session.getCOSTUMER_ID(), name, password, email, phone);
 
         call.enqueue(
-                new Callback<ValueResponse>() {
+                new Callback<ResponseDefault>() {
                     @Override
-                    public void onResponse(Call<ValueResponse> call, Response<ValueResponse> response) {
+                    public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
                         alert.loaderStop();
                         if (response.body().getStatus().equals(MyConstant.System.responseSuccess)){
                             Toast.makeText(getContext(), "Profil berhasil diperbaharui", Toast.LENGTH_LONG).show();
@@ -100,7 +99,7 @@ public class FragmentEditProfile extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<ValueResponse> call, Throwable t) {
+                    public void onFailure(Call<ResponseDefault> call, Throwable t) {
                         alert.loaderStop();
                         alert.alertInfo(t.getMessage());
                     }

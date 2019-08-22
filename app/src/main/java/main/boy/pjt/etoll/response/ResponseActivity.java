@@ -1,4 +1,4 @@
-package main.boy.pjt.etoll.values;
+package main.boy.pjt.etoll.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Boy Panjaitan on 15/06/2018.
  */
 
-public class ValueActivity {
+public class ResponseActivity {
     public static class RetrofitResponse{
         @SerializedName("status")
         @Expose
@@ -22,7 +22,7 @@ public class ValueActivity {
 
         @SerializedName("data")
         @Expose
-        private List<ValueActivity.Values> data;
+        private List<ResponseActivity.Values> data;
 
         public String getStatus() {
             return status;
@@ -40,11 +40,11 @@ public class ValueActivity {
             this.message = message;
         }
 
-        public List<ValueActivity.Values> getData() {
+        public List<ResponseActivity.Values> getData() {
             return data;
         }
 
-        public void setData(List<ValueActivity.Values> data) {
+        public void setData(List<ResponseActivity.Values> data) {
             this.data = data;
         }
     }
@@ -56,7 +56,7 @@ public class ValueActivity {
 
         @SerializedName("road")
         @Expose
-        private ValueRoad.Values road;
+        private ResponseRoad.Values road;
 
         @SerializedName("type")
         @Expose
@@ -70,11 +70,11 @@ public class ValueActivity {
             this.date = date;
         }
 
-        public ValueRoad.Values getRoad() {
+        public ResponseRoad.Values getRoad() {
             return road;
         }
 
-        public void setRoad(ValueRoad.Values road) {
+        public void setRoad(ResponseRoad.Values road) {
             this.road = road;
         }
 

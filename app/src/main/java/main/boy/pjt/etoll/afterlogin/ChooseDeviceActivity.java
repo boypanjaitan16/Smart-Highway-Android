@@ -2,9 +2,7 @@ package main.boy.pjt.etoll.afterlogin;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.os.ParcelUuid;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,10 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +19,7 @@ import main.boy.pjt.etoll.R;
 import main.boy.pjt.etoll.adapter.AdapterBluetoothList;
 import main.boy.pjt.etoll.helper.MyAlert;
 import main.boy.pjt.etoll.helper.MySession;
-import main.boy.pjt.etoll.values.ValueDevices;
+import main.boy.pjt.etoll.response.ResponseDevices;
 
 public class ChooseDeviceActivity extends AppCompatActivity {
 
@@ -33,7 +28,7 @@ public class ChooseDeviceActivity extends AppCompatActivity {
     SwipeRefreshLayout refreshLayout;
     RecyclerView recyclerView;
     Set<BluetoothDevice> devices;
-    List<ValueDevices> valueDevices;
+    List<ResponseDevices> responseDevices;
     BluetoothAdapter adapter;
 
     @Override
@@ -45,7 +40,7 @@ public class ChooseDeviceActivity extends AppCompatActivity {
         alert       = new MyAlert(this, false);
         refreshLayout   = findViewById(R.id.swipe);
         recyclerView    = findViewById(R.id.device_list);
-        valueDevices    = new ArrayList<>();
+        responseDevices = new ArrayList<>();
         adapter         = BluetoothAdapter.getDefaultAdapter();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,12 +64,12 @@ public class ChooseDeviceActivity extends AppCompatActivity {
             devices = adapter.getBondedDevices();
 
             if(devices.size() > 0){
-                valueDevices.clear();
+                responseDevices.clear();
                 for(BluetoothDevice device: devices){
-                    valueDevices.add(new ValueDevices(device.getName(), device.getAddress()));
+                    responseDevices.add(new ResponseDevices(device.getName(), device.getAddress()));
                 }
 
-                AdapterBluetoothList adapterBluetoothList = new AdapterBluetoothList(this, valueDevices);
+                AdapterBluetoothList adapterBluetoothList = new AdapterBluetoothList(this, responseDevices);
 
                 recyclerView.setAdapter(adapterBluetoothList);
 
